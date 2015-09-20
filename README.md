@@ -29,8 +29,8 @@ Note that `tween` assumes that the keyframes are sorted.
     // ...render:
       <h2
         style={tween(time, {
-          [MIN_TIME]: { transform: rotate(0) },
-          [MAX_TIME]: { transform: rotate(360) } })}>
+           0: { transform: rotate(0) },
+          60: { transform: rotate(360) } })}>
         spin
       </h2>
 
@@ -76,8 +76,8 @@ time and more time building your animation.
         ... and tween to spin some text:
         <h2
           style={tween(time, {
-            [MIN_TIME]: { transform: rotate(0) },
-            [MAX_TIME]: { transform: rotate(360) } })}>
+              0: { transform: rotate(0) },
+            100: { transform: rotate(360) } })}>
           spin
         </h2>
 
