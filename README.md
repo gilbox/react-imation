@@ -5,6 +5,7 @@ various composable utilities for creating complex timeline-based animation in a 
 
     npm install react-imation --save
 
+-  [Demo1](http://gilbox.github.io/react-imation/examples/demo1/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo1/app.js)] `tween`, `<Timeline />`
 -  [Demo2](http://gilbox.github.io/react-imation/examples/demo2/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo2/app.js)] `tween`, `<Timeline />`, `react-motion`
 - [Demo3](http://gilbox.github.io/react-imation/examples/demo3/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo3/app.js)] `tween`, `<Timeline />`
 
