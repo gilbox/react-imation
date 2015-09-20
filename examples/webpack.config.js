@@ -34,7 +34,7 @@ module.exports = {
 
   resolve: {
     alias: {
-      'react-track': path.resolve(__dirname + '../../src/')
+      'react-imation': path.resolve(__dirname + '../../src/')
     }
   },
 

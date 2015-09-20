@@ -1,16 +1,16 @@
 {
-  "name": "react-track",
+  "name": "react-imation",
   "version": "0.2.1",
-  "description": "react element tracking and animation",
+  "description": "functional tweening and animation for react",
   "main": "src",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gilbox/react-track.git"
+    "url": "https://github.com/gilbox/react-imation.git"
   },
-  "homepage": "https://github.com/gilbox/react-track/blob/latest/README.md",
-  "bugs": "https://github.com/gilbox/react-track/issues",
+  "homepage": "https://github.com/gilbox/react-imation/blob/latest/README.md",
+  "bugs": "https://github.com/gilbox/react-imation/issues",
   "scripts": {
-    "build-global": "rm -rf build/global && NODE_ENV=production webpack src/index.js build/global/react-track.js && NODE_ENV=production COMPRESS=1 webpack src/index.js build/global/react-track.min.js && echo \"gzipped, the global build is `gzip -c build/global/react-track.min.js | wc -c` bytes\"",
+    "build-global": "rm -rf build/global && NODE_ENV=production webpack src/index.js build/global/react-imation.js && NODE_ENV=production COMPRESS=1 webpack src/index.js build/global/react-imation.min.js && echo \"gzipped, the global build is `gzip -c build/global/react-imation.min.js | wc -c` bytes\"",
     "build-npm": "rm -rf build/npm && babel -d build/npm/lib ./src --stage 0 && cp README.md build/npm && find -X build/npm/lib -type d -name __tests__ | xargs rm -rf && node -p 'p=require(\"./package-npm\");JSON.stringify(p,null,2)' > build/npm/package.json",
     "examples": "rm -rf examples/js && webpack-dev-server --config examples/webpack.config.js --content-base examples",
     "examples-build": "rm -rf examples/js && webpack --config examples/webpack.build.config.js",
@@ -41,7 +41,6 @@
     "karma-webpack": "^1.3.1",
     "lodash": "^3.10.1",
     "mocha": "^2.0.1",
-    "raf": "^3.1.0",
     "react": "0.13.x",
     "react-derive": "^0.1.1",
     "react-motion": "^0.2.7",
@@ -56,16 +55,18 @@
   "peerDependencies": {
     "react": "0.13.x"
   },
-  "dependencies": {},
+  "dependencies": {
+    "raf": "^3.1.0"
+  },
   "tags": [
     "react",
-    "scroll"
+    "animation"
   ],
   "keywords": [
     "react",
     "react-component",
-    "scroll",
-    "scrolling",
-    "animation"
+    "animation",
+    "tweening",
+    "easing"
   ]
 }
