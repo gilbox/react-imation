@@ -8,6 +8,10 @@ various composable utilities for creating complex timeline-based animation in a 
 -  [Demo2](http://gilbox.github.io/react-imation/examples/demo2/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo2/app.js)] `tween`, `<Timeline />`, `react-motion`
 - [Demo3](http://gilbox.github.io/react-imation/examples/demo3/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo3/app.js)] `tween`, `<Timeline />`
 
+Also check out [`react-track`](https://github.com/gilbox/react-track)'s'
+demo which combines `react-imation` tweening with
+DOM tracking.
+
 ## `tween(currentFrame, keyframes, [ease])`
 
 The first argument, `currentFrame` is a number representing the current
@@ -19,24 +23,16 @@ argument which is an object whose entries represent
 timeline positions and their associated values.
 Note that `tween` assumes that the keyframes are sorted.
 
-    import {TrackDocument, Track} from 'react-track';
-    import {topTop} from 'react-track/tracking-formulas';
     import {tween} from 'react-imation';
-    import {rgb, translate3d} from 'react-imation/tween-value-factories';
+    import {rotate} from 'react-imation/tween-value-factories';
 
     // ...render:
-      <TrackDocument formulas={[topTop]}>
-      {topTop =>
-
-        <Track component={AwesomeComponent} formulas={[topTop]}>
-        {(AwesomeComponentTracked,posTopTop) =>
-          <AwesomeComponentTracked
-            style={tween(scrollY, {
-              [posTopTop]: { opacity: 1, color: rgb(255,0,0), transform: translate3d(0,150,0) },
-              [posTopTop+200]: { opacity: 0, color: rgb(0,255,0), transform: translate3d(0,100,0) } })} />
-        }</Track>
-
-      }</TrackDocument>
+      <h2
+        style={tween(time, {
+          [MIN_TIME]: { transform: rotate(0) },
+          [MAX_TIME]: { transform: rotate(360) } })}>
+        spin
+      </h2>
 
 Tweening values that require special formatting is
 super-easy. All you have to do is create a new
@@ -76,6 +72,14 @@ time and more time building your animation.
         <button onClick={event => setTime(50)}>
           Jump to 50
         </button>
+
+        ... and tween to spin some text:
+        <h2
+          style={tween(time, {
+            [MIN_TIME]: { transform: rotate(0) },
+            [MAX_TIME]: { transform: rotate(360) } })}>
+          spin
+        </h2>
 
       </div>
     }</Timeline>
