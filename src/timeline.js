@@ -64,6 +64,7 @@ export class Timeliner {
     );
 
     this.time = this.time || 0;
+    this.increment = this.increment || 1;
 
     if (this.playing) raf(this.tick);
   }
@@ -72,12 +73,14 @@ export class Timeliner {
     const {playing, time} = this;
 
     if (time >= this.max) {
+      if (this.onComplete) this.onComplete(time);
       if (this.loop) {
         this.time = this.min;
+      } else {
+        this.playing = false;
       }
     } else {
-      // todo: arbitrary increment
-      this.time = time+1;
+      this.time = time + this.increment;;
 
       Object.keys(this.listeners).forEach(id =>
         this.listeners[id](this.time)
