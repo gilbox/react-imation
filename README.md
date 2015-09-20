@@ -41,7 +41,7 @@ Note that `tween` assumes that the keyframes are sorted.
 Tweening values that require special formatting is
 super-easy. All you have to do is create a new
 tween value factory. Check out
-[`tween-value-factories.js`](https://github.com/gilbox/react-track/blob/master/src/tween-value-factories.js)
+[`tween-value-factories.js`](https://github.com/gilbox/react-imation/blob/master/src/tween-value-factories.js)
 and you'll see what I mean.
 
 I need to add more documentation about the `tween` function, but in the
