@@ -1,6 +1,6 @@
 {
   "name": "react-imation",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "functional tweening and animation for react",
   "main": "src",
   "repository": {
@@ -11,7 +11,7 @@
   "bugs": "https://github.com/gilbox/react-imation/issues",
   "scripts": {
     "build-global": "rm -rf build/global && NODE_ENV=production webpack src/index.js build/global/react-imation.js && NODE_ENV=production COMPRESS=1 webpack src/index.js build/global/react-imation.min.js && echo \"gzipped, the global build is `gzip -c build/global/react-imation.min.js | wc -c` bytes\"",
-    "build-npm": "rm -rf build/npm && babel -d build/npm/lib ./src --stage 0 && cp README.md build/npm && find -X build/npm/lib -type d -name __tests__ | xargs rm -rf && node -p 'p=require(\"./package-npm\");JSON.stringify(p,null,2)' > build/npm/package.json",
+    "build-npm": "rm -rf build/npm && babel -d build/npm ./src --stage 0 && cp README.md build/npm && find -X build/npm -type d -name __tests__ | xargs rm -rf && node -p 'p=require(\"./package-npm\");JSON.stringify(p,null,2)' > build/npm/package.json",
     "examples": "rm -rf examples/js && webpack-dev-server --config examples/webpack.config.js --content-base examples",
     "examples-build": "rm -rf examples/js && webpack --config examples/webpack.build.config.js",
     "test": "jsxhint . && karma start",
