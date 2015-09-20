@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {Easer} from 'functional-easing';
-import {tween, ease} from 'react-track/tween';
-import {translateY} from 'react-track/tween-value-factories';
-import {Timeline, Timeliner} from 'react-track/timeline';
+import {tween, ease, Timeline, Timeliner} from 'react-imation';
+import {translateY} from 'react-imation/tween-value-factories';
 import stateful from 'react-stateful-stream';
 import {track, derive} from 'react-derive';
 import u from 'updeep';

@@ -21,8 +21,8 @@ Note that `tween` assumes that the keyframes are sorted.
 
     import {TrackDocument, Track} from 'react-track';
     import {topTop} from 'react-track/tracking-formulas';
-    import {tween} from 'react-track/tween';
-    import {rgb, translate3d} from 'react-track/tween-value-factories';
+    import {tween} from 'react-imation';
+    import {rgb, translate3d} from 'react-imation/tween-value-factories';
 
     // ...render:
       <TrackDocument formulas={[topTop]}>

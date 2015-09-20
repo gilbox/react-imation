@@ -45,6 +45,7 @@
     "react-derive": "^0.1.1",
     "react-motion": "^0.2.7",
     "react-stateful-stream": "^0.1.0",
+    "react-track": "^0.2.1",
     "rekapi": "^1.4.4",
     "rf-changelog": "^0.4.0",
     "rx": "2.3.18",
