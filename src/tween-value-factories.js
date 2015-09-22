@@ -1,15 +1,20 @@
-import {createTweenValueFactory, isWrapped} from './tween';
+import {createTweenValueFactory} from './tween';
 
-export const rgb = createTweenValueFactory(value => `rgb(${value.map(Math.round).join(',')})`);
-export const rgba = createTweenValueFactory(value => `rgba(${value.map(Math.round).join(',')})`);
+export const rgb = createTweenValueFactory(value => `rgb(${value.join(',')})`);
+export const rgba = createTweenValueFactory(value => `rgba(${value.join(',')})`);
 export const scale = createTweenValueFactory(value => `scale(${value})`);
 export const deg = createTweenValueFactory(value => `${value}deg`);
 export const grad = createTweenValueFactory(value => `${value}grad`);
 export const rad = createTweenValueFactory(value => `${value}rad`);
 export const turn = createTweenValueFactory(value => `${value}turn`);
 export const rotate = createTweenValueFactory(value => `rotate(${value})`, deg);
+export const rotateX = createTweenValueFactory(value => `rotateX(${value})`, deg);
+export const rotateY = createTweenValueFactory(value => `rotateY(${value})`, deg);
+export const rotateZ = createTweenValueFactory(value => `rotateZ(${value})`, deg);
 export const px = createTweenValueFactory(value => `${value}px`);
 export const em = createTweenValueFactory(value => `${value}em`);
+export const vw = createTweenValueFactory(value => `${value}vw`);
+export const vh = createTweenValueFactory(value => `${value}vh`);
 export const percent = createTweenValueFactory(value => `${value}%`);
 export const translateX = createTweenValueFactory(value => `translateX(${value})`, px);
 export const translateY = createTweenValueFactory(value => `translateY(${value})`, px);
