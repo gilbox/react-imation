@@ -31,6 +31,10 @@ export class Timeline extends Component {
       this.timeliner = nextProps.timeliner;
       this._addListener();
     }
+    if (this.timeliner) {
+      Object.keys(nextProps).forEach(key =>
+        this.timeliner[key] = nextProps[key]);
+    }
   }
 
   _addListener() {
