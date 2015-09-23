@@ -47,7 +47,8 @@ export default class RollButton extends Component {
             partitionedList,
             width,
             height,
-            timeliner } = this.props;
+            timeliner,
+            onClick } = this.props;
     const [topList, bottomList] = partitionedList;
     const currentText = list[currentIndex];
 
@@ -65,7 +66,9 @@ export default class RollButton extends Component {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
+          margin: 'auto'
         }}
+        onClick={onClick}
         onMouseEnter={event => {
           timeliner.setTime(0);
           timeliner.play();
