@@ -5,6 +5,9 @@ import {Easer} from 'functional-easing';
 import RollButton from '../demo3/RollButton';
 
 export default class GameOver extends Component {
+  componentDidMount() {
+    this.props.gameOverSound.play();
+  }
   render() {
     const {playAgain, score} = this.props;
 

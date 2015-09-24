@@ -2,10 +2,14 @@ import React, {Component} from 'react';
 import {Timeline, Timeliner, tween, combine} from 'react-imation';
 import {percent, translate3d, scale, translateX, rotateY} from 'react-imation/tween-value-factories';
 import stateful from 'react-stateful-stream';
+import {derive, track} from 'react-derive';
+import {elegant as optimize} from 'elegant-react';
 import {Easer} from 'functional-easing';
 import GameOver from './GameOver';
 import u from 'updeep';
 const immutable = u({});
+
+React.initializeTouchEvents(true);
 
 const easeOutSine = new Easer().using('out-sine');
 const easeInSine = new Easer().using('in-sine');
@@ -34,10 +38,19 @@ const createFlake = id =>
     increment: 0.15 + Math.random()*0.2,
   });
 
+const pffSounds = [1,2,3].map(i => new Audio(`sounds/pf${i}.mp3`));
+const pffSoundsCount = pffSounds.length;
+const crrSound = new Audio('sounds/crr.mp3');
+const gameOverSound = new Audio('sounds/gameover.mp3');
+
+const randi = limit => ~~(Math.random() * limit);
+const playRandomPfSound = () => pffSounds[randi(pffSoundsCount)].play();
+
 const flakeHasId = id => flake => flake.id === id;
 const concat = newItem => items => items.concat(newItem);
 const lengthIsLessThan = length => items => items.length < length;
 const increment = x => x + 1;
+const decrement = x => x - 1;
 
 @stateful(
   immutable(
@@ -61,12 +74,12 @@ export default class Game extends Component {
 
     return (
       <div>
-        <div style={{position: 'absolute', margin: '10px'}}>
+        <div style={{position: 'absolute', margin: '10px', userSelect: 'none'}}>
           {score.toLocaleString()}
         </div>
 
         {(gameIsOver && !flakes.length) ?
-          <GameOver {...this.props} />
+          <GameOver gameOverSound={gameOverSound} {...this.props} />
           :
           <Flakes {...this.props} />}
       </div>
@@ -74,6 +87,9 @@ export default class Game extends Component {
   }
 }
 
+const shakeKeyframes = { 0: 10, 5: -8, 10: 5, 15: 0};
+
+@optimize({statics: ['score']}) // changing the 'score' prop won't cause re-render
 class Flakes extends Component {
   componentDidMount() {
     const {addFlake, gameOver} = this.props;
@@ -92,41 +108,98 @@ class Flakes extends Component {
   }
 
   render() {
-    const {flakes, explodeFlake, removeFlake, addToScore, droppedCount} = this.props;
+    const {flakes, explodeFlake, removeFlake, addToScore, droppedCount, lastPoints} = this.props;
 
-    return <div onClick={event => addToScore(-100)} style={{userSelect: 'none', ...fullViewportStyle}}>
-      {flakes.map(({id, increment, size, rotateX, rotateY, rotationSpeed, left, drift, image, explode}, index) =>
-        <Timeline
-          increment={tween(droppedCount, {0:increment, [MAX_DROPPED]: increment*2}, easeInSine)}
-          key={id}
-          playOnMount={true}
-          max={105}
-          onComplete={() => removeFlake(id)}>
-        {({time}) =>
-          <div
-            onClick={event => {
-              event.stopPropagation();
-              explodeFlake(index);
-              addToScore(10000 * rotationSpeed * increment / size
-                         * tween(droppedCount, {0:1, [MAX_DROPPED]:6}, easeInSine));
-            }}
-            key={id}
-            style={{
-              cursor: 'pointer',
-              position: 'absolute',
-              left,
-              top: -size,
-              transform: `translateX(${tween(time, {0:0, 105:drift})}px) ` +
-                         `translateY(${time}vh) rotateX(${rotateX}deg) rotateY(${rotateY}deg)` }}>
+    const createHandleSlash = (explode,playFrom,rotationSpeed,index,increment,size) => event => {
+      event.stopPropagation();
+      if (explode) return;
+      playFrom(t => Math.max(0, t-10)); // shake
+      rotationSpeed>0 ? playRandomPfSound() : crrSound.play();
+      explodeFlake(index);
+      addToScore(10000 * rotationSpeed * increment / size
+                 * tween(droppedCount, {0:1, [MAX_DROPPED]:6}, easeInSine));
+    };
 
-            <Flake
-              rotate={time*rotationSpeed}
-              onExploded={() => removeFlake(id)}
-              {...{size, image, explode}} />
+    return (
+      <Timeline initialTime={15} max={15}>
+      {({time, playFrom}) =>
+        <div style={{ userSelect: 'none',
+                      transform: `translateX(${tween(time, shakeKeyframes)}px)`,
+                      ...fullViewportStyle }}>
 
-          </div>
-        }</Timeline>
-      )}
+          <Trails />
+
+          {flakes.map(({id, increment, size, rotateX, rotateY, rotationSpeed, left, drift, image, explode}, index) =>
+            <Timeline
+              increment={tween(droppedCount, {0:increment, [MAX_DROPPED]: increment*2}, easeInSine)}
+              key={id}
+              playOnMount={true}
+              max={105}
+              onComplete={() => removeFlake(id, explode)}>
+            {({time}) => {
+              const handleSlash = createHandleSlash(explode,playFrom,rotationSpeed,index,increment,size);
+              return <div
+                onMouseOver={handleSlash}
+                onTouchMove={handleSlash}
+                key={id}
+                style={{
+                  cursor: 'pointer',
+                  position: 'absolute',
+                  left,
+                  top: -size,
+                  transform: `translateX(${tween(time, {0:0, 105:drift})}px) ` +
+                             `translateY(${time}vh) rotateX(${rotateX}deg) rotateY(${rotateY}deg)` }}>
+
+                <Flake
+                  rotate={time*rotationSpeed}
+                  onExploded={() => removeFlake(id, explode)}
+                  {...{size, image, explode}} />
+
+              </div>
+            }}</Timeline>
+          )}
+
+        </div>
+      }</Timeline>
+    )
+  }
+}
+
+@optimize   // automatically optimize shouldComponentUpdate
+@stateful(
+  immutable({
+    trails: {},
+    trailCount: 0
+  }),
+  edit => ({
+    addTrail: (x,y) => edit(state => u({ trails: { [state.trailCount]: {x,y} }, trailCount: increment }, state)),
+    removeTrail: id => edit(u({ trails: u.omit(`${id}`) }))
+  })
+)
+class Trails extends Component {  // mouse trails
+  render() {
+    const {trails, addTrail, removeTrail} = this.props;
+
+    return <div onMouseMove={({pageX, pageY}) => addTrail(pageX, pageY)}
+                style={{...fullViewportStyle}}>
+
+      {Object.keys(trails).map(key => {
+        const {x,y} = trails[key];
+        return (
+          <Timeline key={key} playOnMount={true} max={5} onComplete={() => removeTrail(key)}>
+          {({time}) =>
+            <div
+              style={{
+                cursor: 'default',
+                borderRadius: '50%',
+                width: '5px',
+                height: '5px',
+                backgroundColor: '#77aa77',
+                position: 'absolute',
+                transform: `translate(${x}px, ${y}px)` }} />
+          }</Timeline>)
+      })}
+
     </div>
   }
 }
@@ -142,6 +215,7 @@ const fragments = [1,2,3,4].map(index => ({
   v: index % 2 ? 1:-1   // direction of explosion along Y-axis
 }));
 
+@optimize
 class Flake extends Component {
   render() {
     const {rotate, size, image, explode, onExploded} = this.props;
