@@ -61,13 +61,14 @@ export class Timeliner {
     this.pause = ::this.pause;
     this.setPlay = ::this.setPlay;
     this.setTime = ::this.setTime;
+    this.playFrom = ::this.playFrom;
     this.togglePlay = ::this.togglePlay;
 
     Object.keys(options).forEach(option =>
       this[option] || (this[option] = options[option])
     );
 
-    this.time = this.time || 0;
+    this.time = options.initialTime || this.time || 0;
     this.increment = this.increment || 1;
 
     if (this.playing) raf(this.tick);
@@ -95,11 +96,16 @@ export class Timeliner {
   }
 
   setTime(time) {
-    this.time = time;
+    this.time = (typeof time === 'function') ? time(this.time) : time;
   }
 
   play() { this.setPlay(true) }
   pause() { this.setPlay(false) }
+
+  playFrom(time) {
+    this.setTime(time);
+    this.setPlay(true);
+    }
 
   setPlay(playing) {
     if (!this.playing && playing) raf(this.tick);
