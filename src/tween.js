@@ -30,8 +30,10 @@ export function tweenValues(progress, a, b, easer) {
     return a.tween(progress, a, b, easer);
 
   // now we enforce that a and b are the same type
-  if (typeof(b) !== typeof(a))
-    throw(Error(`Tried to tween mismatched types ${typeof(a)} !== ${typeof(b)}`));
+  if (process.env.NODE_ENV !== 'production') {
+    if (typeof(b) !== typeof(a))
+      throw(Error(`Tried to tween mismatched types ${typeof(a)} !== ${typeof(b)}`));
+  }
 
   if (a instanceof Array)
     return a.map((value,index) => tweenValues(progress, value, b[index], easer));
@@ -94,9 +96,10 @@ export function tween(position, keyframes, easer=identity) {
   const positionA = positions[index-1];
   const positionB = positions[index];
 
-  // kinda weird
-  if (positionA instanceof Function || positionB instanceof Function) {
-    throw Error('Keyframes are not allowed to contain function as properties', keyframes);
+  if (process.env.NODE_ENV !== 'production') {
+    if (positionA instanceof Function || positionB instanceof Function) {
+      throw Error('Keyframes are not allowed to contain function as properties', keyframes);
+    }
   }
 
   const range = positionB - positionA;
