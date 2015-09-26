@@ -192,6 +192,10 @@ function combineTween(progress,
  * tween and keyframe-level easing
  **/
 export function ease(easer, wrappedValue) {
+  if (typeof wrappedValue === 'undefined') {  // curry
+    return wrappedValue => ease(easer, wrappedValue);
+  }
+
   return {
     easedValue: wrappedValue,
     tween(progress, wrappedValueA, wrappedValueB) {

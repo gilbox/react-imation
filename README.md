@@ -14,7 +14,7 @@ Also check out [`react-track`](https://github.com/gilbox/react-track)'s'
 demo which combines `react-imation` tweening with
 DOM tracking.
 
-## `tween(currentFrame, keyframes, [ease])`
+## [`tween(currentFrame, keyframes, [ease])`](https://github.com/gilbox/react-imation/blob/master/src/tween.js)
 
 The first argument, `currentFrame` is a number representing the current
 position in the animation **timeline**. It can represent actual time, or as in the
@@ -56,6 +56,18 @@ above, it also works with regular numbers. Here are some examples:
                30:20});       //=> 5
 
     tween(5, {0:10, 5:0});    //=> 5
+
+You can use this approach to tween styles:
+
+    <h2 style={{ transform: `rotate(${tween(time, {0:0,60:360})}deg)` }}>
+      spin
+    </h2>
+
+You can tween all of your styles this way and it will work fine.
+However, when you have a lot of styles this can get tedious and difficult
+to read. For this reason, `tween` supports using *wrapped values*.
+Read the next section about creating *wrapped values* using
+tween value factories (TvFs).
 
 #### `tween`: creating wrapped values with tween value factories (TvFs)
 
@@ -139,9 +151,9 @@ In react we can use this in a style tag:
       }}>
 
 
-#### `tween`: tweening objects
+#### `tween`: tweening object literals
 
-Tweening plain objects (ie., object literals) means that we are
+Tweening object literals means that we are
 actually tweening the values within those objects and returning
 a new object with a similar shape. This works
 with both numbers and wrapped values.
@@ -158,6 +170,27 @@ The result is something like this:
     <h2 style={{ transform: 'rotate(180deg)' }}>
       spin
     </h2>
+
+The real advantage of using object literals is
+that it allows you to tween multiple style properties
+in one `tween()`:
+
+    <h2
+      style={tween(time, {
+         0: { backgroundColor: rgba(0,200,0,.5), transform: rotate(0) },
+        60: { backgroundColor: rgba(200,0,0,1), transform: rotate(360) } })}>
+      spin
+    </h2>
+
+the result is something like:
+
+    <h2 style={{ backgroundColor: 'rgba(100,100,0,.75)',
+                 transform: 'rotate(180deg)' }}>
+      spin
+    </h2>
+
+**warning**: All keyframes in a single tween must have exactly the same
+properties. The only exception to this is when using easing.
 
 #### `tween`: easing
 
@@ -193,23 +226,33 @@ There are three ways to ease with `tween`:
           spin
         </h2>
 
-Note that we did not wrap `360` with `ease()`. Wrapping the
-destination value is optional because the source's easing function
-is always the one that `tween` applies.
+  Note that we did not wrap `360` with `ease()`. Wrapping the
+  destination value is optional because the source's easing function
+  is always the one that `tween` applies.
+
+  The `ease()` TvF is automatically curried, so we can also use
+  it like this:
+
+        const easeOutSine = ease(new Easer().using('out-sine'));
+
+        <h2
+          style={tween(time, {
+             0: { transform: rotate(easeOutSine(0)) },
+            60: { transform: rotate(360) } })}>
+          spin
+        </h2>
+
 
 #### `tween`: combine TvF
 
 `combine` works as you might expect.
 
-    combine(rotate(90) translateX(100))
+    combine(rotate(90), translateX(100))
       .resolveValue();    //=> "rotate(90deg) translateX(100px)"
 
-## `<Timeline />`
+## [`<Timeline />`](https://github.com/gilbox/react-imation/blob/master/src/timeline.js)
 
-Timeline as a component. Manages the state of `time`.
-Timeline as a component is super-handy.
-You can spend less time thinking about managing the current
-time and more time building your animation.
+Timeline as a component is super-handy. It manages the state of `time`.
 
     <Timeline
       playOnMount={true}
@@ -245,6 +288,60 @@ time and more time building your animation.
       </div>
     }</Timeline>
 
-The `<Timeline />` component is pretty basic right now. If you
-encounter a missing feature that you need, please add it and submit a PR.
-You'll find that modifying the component is straightforward.
+#### `<Timeline />`: overview
+
+It accepts a single child which should be a function.
+When rendered, Timeline calls the function by passing in as the first
+argument an instance of the `Timeliner` class.
+
+#### `<Timeline />`: the [**`Timeliner`**](https://github.com/gilbox/react-imation/blob/master/src/timeline.js) class and `timeliner` prop
+
+The [`Timeliner`](https://github.com/gilbox/react-imation/blob/master/src/timeline.js)
+class does the heavy lifting of scheduling animation
+frames and storing the value of `time`. When using the `<Timeline />`
+component you can provide or omit a `timeliner` prop. By omitting the
+`timeliner` prop you are instructing `<Timeline />` to instantiate and
+manage an instance of the `Timeliner` class all by itself.
+
+In many cases,
+omitting the `timeliner` prop works very well. However, sometimes you
+need the added flexibility of *lifting* the state management functionality
+outside of the `<Timeline />` component. Here's what it looks like when
+we provide a `timeliner` prop:
+
+    const timeliner = new Timeliner();
+    timeliner.play();
+
+    <div>
+      <button
+        onClick={() =>
+          this.setState({showTimeline: !this.state.showTimeline})
+        }>
+          Toggle
+      </button>
+
+      {this.state.showTimeline &&
+        <Timeline timeliner={timeliner}>
+        {({time}) =>
+          `The current time is {time}`
+        }</Timeline>
+    </div>
+
+Notice how we can mount/unmount the `<Timeline />` component
+without losing it's state, and since the `timeliner` instance has
+been lifted outside of the `<Timeline />` component, when the component
+is re-mounted it works the same as if it had been mounted all along.
+
+The single most important property of the `Timeliner` class is `time`.
+Let's take a look at the function we passed in as the child of the
+`<Timeline />` component from the previous example:
+
+    ({time}) => `The current time is {time}`
+
+Remember, when `<Timeline />` calls this function it will pass in
+an instance of the `Timeliner` class. Our function uses *object destructuring*
+to get the value of the `time` property.
+
+You can access *methods* on the `Timeliner` instance via destructuring
+as well. All of the methods exposed by `Timeliner` are automatically
+bound to the `Timeliner` instance so that they work in this way.
