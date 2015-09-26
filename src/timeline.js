@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import raf from 'raf';
+import {tween} from './tween';
 
 export class Timeline extends Component {
   // todo: prop types & default props
@@ -68,7 +69,7 @@ export class Timeliner {
       this[option] || (this[option] = options[option])
     );
 
-    this.time = options.initialTime || this.time || 0;
+    this.setTime(options.initialTime || this.time || 0);
     this.increment = this.increment || 1;
 
     if (this.playing) raf(this.tick);
@@ -80,12 +81,12 @@ export class Timeliner {
     if (time >= this.max) {
       if (this.onComplete) this.onComplete(time);
       if (this.loop) {
-        this.time = this.min;
+        this.setTime(this.min);
       } else {
         this.playing = false;
       }
     } else {
-      this.time = time + this.increment;;
+      this.setTime(time + this.increment);
 
       Object.keys(this.listeners).forEach(id =>
         this.listeners[id](this.time)
@@ -97,6 +98,7 @@ export class Timeliner {
 
   setTime(time) {
     this.time = (typeof time === 'function') ? time(this.time) : time;
+    this.tween = (keyframes, easer) => tween(time, keyframes, easer);
   }
 
   play() { this.setPlay(true) }
