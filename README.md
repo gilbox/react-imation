@@ -9,6 +9,7 @@ various composable utilities for creating complex timeline-based animation in a 
 -  [Demo2](http://gilbox.github.io/react-imation/examples/demo2/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo2/app.js)] `tween`, `<Timeline />`, `react-motion`
 - [Demo3](http://gilbox.github.io/react-imation/examples/demo3/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo3/RollButton.js)] `tween`, `<Timeline />`, `Timeliner`
 - [Demo4](http://gilbox.github.io/react-imation/examples/demo4/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo4/Demo4.js)] `tween`, `<Timeline />`
+- [Demo5](http://gilbox.github.io/react-imation/examples/demo5/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo5/Demo5.js)] `tween`, `<Timeline />`, `ease`
 
 Also check out [`react-track`](https://github.com/gilbox/react-track)'s'
 demo which combines `react-imation` tweening with
