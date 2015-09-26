@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Timeline, Timeliner, tween, combine} from 'react-imation';
+import {Timeline, Timeliner, combine} from 'react-imation';
 import {scale, rotateY} from 'react-imation/tween-value-factories';
 import {Easer} from 'functional-easing';
 import RollButton from '../demo3/RollButton';
@@ -13,7 +13,7 @@ export default class GameOver extends Component {
 
     return (
       <Timeline playOnMount={true} max={1} increment={0.05}>
-      {({time}) =>
+      {({tween}) =>
         <div
           style={{
             textAlign: 'center',
@@ -25,7 +25,7 @@ export default class GameOver extends Component {
           <div
             style={{
               fontSize: '90px',
-              ...tween(time, {
+              ...tween({
                 0: {opacity: 0, transform: combine( scale(10,10), rotateY(60))},
                 1: {opacity: 1, transform: combine( scale(1,1), rotateY(0))}
               })}}>

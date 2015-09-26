@@ -346,3 +346,26 @@ to get the value of the `time` property.
 You can access *methods* on the `Timeliner` instance via destructuring
 as well. All of the methods exposed by `Timeliner` are automatically
 bound to the `Timeliner` instance so that they work in this way.
+
+#### `<Timeline />`: the partially applied `tween` function
+
+The Timeliner class exposes a `tween` method which is the aforementioned `tween` function
+the first argument already applied. The following two expressions
+are equivalent:
+
+    tween(timeliner.time, {0:0, 60:100});
+
+    timeliner.tween({0:0, 60:100});
+
+The happy consequence is that with `<Timeline />` you can use destructuring
+to easily access `Timeliner#tween`:
+
+    <Timeline>
+    {({tween}) =>
+      <h1 style={tween({
+        0:  { color: rgb(0,0,255) },
+        60: { color: rgb(255,0,0) }
+      })}>
+        I change color!
+      </h1>
+    }</Timeline>

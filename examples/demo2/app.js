@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Easer} from 'functional-easing';
-import {tween, Timeline} from 'react-imation';
+import {Timeline} from 'react-imation';
 import {rotate, percent} from 'react-imation/tween-value-factories';
 import Scrubber from './Scrubber';
 import {Spring} from 'react-motion';
@@ -35,10 +35,10 @@ class App extends Component {
         min={MIN_TIME}
         max={MAX_TIME}
         loop={true}>
-      {({time, playing, togglePlay, setTime}) => {
+      {({tween,time, playing, togglePlay, setTime}) => {
 
         const top = (100 + 40 * Math.sin(time/5));
-        const left = tween(time, {
+        const left = tween({
           [MIN_TIME]: 0,
           [MAX_TIME]: 100
         }, easeOutSine);
@@ -63,7 +63,7 @@ class App extends Component {
             }}/>
 
           <h2
-            style={tween(time, {
+            style={tween({
               [MIN_TIME]: { transform: rotate(0) },
               [MAX_TIME]: { transform: rotate(360) } },
               easeOutBounce)}>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Timeline, tween} from 'react-imation';
+import {Timeline} from 'react-imation';
 import stateful from 'react-stateful-stream';
 import {rotateX, rotateY, rotateZ,
         translateY, turn, vh, rgba} from 'react-imation/tween-value-factories';
@@ -82,13 +82,13 @@ export default class Demo4 extends Component {
           if (dropped[i]) { // drop the letter
             return (
               <Timeline key={i+'x'} min={0} max={100} increment={1.5} playOnMount={true}>
-              {({time}) =>
-                <div style={{...dropStyle, ...tween(time, dropKeyframesMove)}}>
+              {({tween}) =>
+                <div style={{...dropStyle, ...tween(dropKeyframesMove)}}>
                   <div
                     key={i}
                     style={{
                       ...dropStyle,
-                      ...tween(time, dropKeyframesRotate)}}
+                      ...tween(dropKeyframesRotate)}}
                     children={char} />
                 </div>
               }</Timeline>)
@@ -96,13 +96,13 @@ export default class Demo4 extends Component {
           } else if (i === wiggleIndex) { // wiggle the letter
             return (
               <Timeline key={i} min={0} max={100} increment={1.5} playOnMount={true}>
-              {({time}) =>
+              {({tween}) =>
                 <div
                   onClick={() => drop(i)} // when the user clicks on a wiggling letter, drop it
                   key={i}
                   style={{
                     ...charStyle,
-                    ...tween(time, wiggleKeyframes, easeInOut)}}
+                    ...tween(wiggleKeyframes, easeInOut)}}
                   children={char} />
               }</Timeline>)
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Easer} from 'functional-easing';
-import {tween, ease, Timeline, Timeliner} from 'react-imation';
+import {ease, Timeline, Timeliner} from 'react-imation';
 import {translateY} from 'react-imation/tween-value-factories';
 import stateful from 'react-stateful-stream';
 import {track, derive} from 'react-derive';
@@ -95,23 +95,23 @@ export default class RollButton extends Component {
                 the timeliner prop), it can be removed from the DOM on mouse out */}
             {isOver &&
               <Timeline timeliner={timeliner}>
-              {({time}) =>
+              {({tween}) =>
                   <div style={{
                     position: 'absolute',
-                    ...tween(time, {
+                    ...tween({
                         0: { transform: translateY(450), ease: easeOutSine },
                         30: { transform: translateY(-15), ease: easeOutElastic },
                         50: { transform: translateY(0) },
                       })
                     }}>
-                    <div style={{whiteSpace: 'no-wrap', opacity: tween(time, {0: 1, 30: 1, 40: 0}), position: 'absolute', bottom: 0, textAlign: 'left'}}>
+                    <div style={{whiteSpace: 'no-wrap', opacity: tween({0: 1, 30: 1, 40: 0}), position: 'absolute', bottom: 0, textAlign: 'left'}}>
                       {topList.map(item =>
                         <div style={listStyle} key={item}>{item}</div>)}
                     </div>
                     <div style={{position: 'absolute', top: '100%', width: '500px', textAlign: 'left'}}>
-                      <div style={{color: 'black', opacity: tween(time, {0:0.4, 18:0.4, 22:1})}}>{currentText}</div>
+                      <div style={{color: 'black', opacity: tween({0:0.4, 18:0.4, 22:1})}}>{currentText}</div>
                       {bottomList.map(item =>
-                        <div style={{opacity: tween(time, {0: 1, 30: 1, 40: 0}), ...listStyle}} key={item}>{item}</div>)}
+                        <div style={{opacity: tween({0: 1, 30: 1, 40: 0}), ...listStyle}} key={item}>{item}</div>)}
                     </div>
                   </div>
               }</Timeline>}
