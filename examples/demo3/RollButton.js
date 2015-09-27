@@ -70,8 +70,7 @@ export default class RollButton extends Component {
         }}
         onClick={onClick}
         onMouseEnter={event => {
-          timeliner.setTime(0);
-          timeliner.play();
+          timeliner.playFrom(0);
           update({
             currentIndex: ~~(Math.random() * list.length),
             isOver: true
