@@ -222,10 +222,14 @@ There are three ways to ease with `tween`:
 
         <h2
           style={tween(time, {
-             0: { transform: rotate(ease(easeOutSine, 0)) },
+             0: { transform: ease(easeOutSine, rotate(0)) },
             60: { transform: rotate(360) } })}>
           spin
         </h2>
+
+  **Heads-up: Doing `rotate(ease(easeOutSine, 0))`
+  instead of `ease(easeOutSine, rotate(0))` unfortunately
+  does *not*.**
 
   Note that we did not wrap `360` with `ease()`. Wrapping the
   destination value is optional because the source's easing function
@@ -238,11 +242,14 @@ There are three ways to ease with `tween`:
 
         <h2
           style={tween(time, {
-             0: { transform: rotate(easeOutSine(0)) },
+             0: { transform: easeOutSine(rotate(0)) },
             60: { transform: rotate(360) } })}>
           spin
         </h2>
 
+  **Heads-up: Doing `rotate(easeOutSine(0))` instead of
+  `easeOutSine(rotate(0))` unfortunately
+  does *not*.**
 
 #### `tween`: combine TvF
 
