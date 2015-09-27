@@ -231,7 +231,7 @@ There are three ways to ease with `tween`:
   instead of `ease(easeOutSine, rotate(0))` unfortunately
   does *not* work.**
 
-  Note that we did not wrap `360` with `ease()`. Wrapping the
+  Note that we did not wrap `rotate(360)` with `ease()`. Wrapping the
   destination value is optional because the source's easing function
   is always the one that `tween` applies.
 
