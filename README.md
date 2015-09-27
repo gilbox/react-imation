@@ -356,8 +356,8 @@ bound to the `Timeliner` instance so that they work in this way.
 
 #### `<Timeline />`: the partially applied `tween` function
 
-The Timeliner class exposes a `tween` method which is the aforementioned `tween` function
-the first argument already applied. The following two expressions
+The Timeliner class exposes a `tween` method which is the same `tween` function
+we've discussed, with the first argument already applied. The following two expressions
 are equivalent:
 
     tween(timeliner.time, {0:0, 60:100});
