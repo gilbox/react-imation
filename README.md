@@ -229,7 +229,7 @@ There are three ways to ease with `tween`:
 
   **Heads-up: Doing `rotate(ease(easeOutSine, 0))`
   instead of `ease(easeOutSine, rotate(0))` unfortunately
-  does *not*.**
+  does *not* work.**
 
   Note that we did not wrap `360` with `ease()`. Wrapping the
   destination value is optional because the source's easing function
@@ -249,7 +249,7 @@ There are three ways to ease with `tween`:
 
   **Heads-up: Doing `rotate(easeOutSine(0))` instead of
   `easeOutSine(rotate(0))` unfortunately
-  does *not*.**
+  does *not* work.**
 
 #### `tween`: combine TvF
 
