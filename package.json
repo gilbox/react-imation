@@ -1,6 +1,6 @@
 {
   "name": "react-imation",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "functional tweening and animation for react",
   "main": "./src/index",
   "repository": {
@@ -61,10 +61,12 @@
   },
   "tags": [
     "react",
+    "react-native",
     "animation"
   ],
   "keywords": [
     "react",
+    "react-native",
     "react-component",
     "animation",
     "tweening",

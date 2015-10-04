@@ -376,3 +376,8 @@ to easily access `Timeliner#tween`:
         I change color!
       </h1>
     }</Timeline>
+
+## react-native support
+
+Supports react-native as of `v0.2.6`, however performance is not so good
+because react-native works best when native props are manipulated directly. 
