@@ -70,7 +70,7 @@ export default function timelineFactory(React, raf) {
         this[option] || (this[option] = options[option])
       );
 
-      this.setTime(options.initialTime || this.time || 0);
+      this.setTime(options.initialTime || this.time || 0, false);
       this.increment = this.increment || 1;
 
       if (this.playing) raf(this.tick);
@@ -82,12 +82,12 @@ export default function timelineFactory(React, raf) {
       if (time >= this.max) {
         if (this.onComplete) this.onComplete(time);
         if (this.loop) {
-          this.setTime(this.min);
+          this.setTime(this.min, false);
         } else {
           this.playing = false;
         }
       } else {
-        this.setTime(time + this.increment);
+        this.setTime(time + this.increment, false);
 
         Object.keys(this.listeners).forEach(id =>
           this.listeners[id](this.time)
@@ -97,17 +97,17 @@ export default function timelineFactory(React, raf) {
       if (playing) raf(this.tick);
     }
 
-    setTime(time) {
+    setTime(time, tick = true) {
       this.time = (typeof time === 'function') ? time(this.time) : time;
       this.tween = (keyframes, easer) => tween(time, keyframes, easer);
-      !this.playing && this.tick();
+      if(tick) !this.playing && this.tick();
     }
 
     play() { this.setPlay(true) }
     pause() { this.setPlay(false) }
 
     playFrom(time) {
-      this.setTime(time);
+      this.setTime(time, false);
       this.setPlay(true);
       }
 
