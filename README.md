@@ -15,6 +15,11 @@ Also check out [`react-track`](https://github.com/gilbox/react-track)'s'
 demo which combines `react-imation` tweening with
 DOM tracking.
 
+If you clone this repo you can run the examples locally via:
+
+        npm install
+        npm run examples
+
 ## [`tween(currentFrame, keyframes, [ease])`](https://github.com/gilbox/react-imation/blob/master/src/tween.js)
 
 The first argument, `currentFrame` is a number representing the current
