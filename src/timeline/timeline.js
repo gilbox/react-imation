@@ -100,6 +100,7 @@ export default function timelineFactory(React, raf) {
     setTime(time) {
       this.time = (typeof time === 'function') ? time(this.time) : time;
       this.tween = (keyframes, easer) => tween(time, keyframes, easer);
+      !this.playing && this.tick();
     }
 
     play() { this.setPlay(true) }
