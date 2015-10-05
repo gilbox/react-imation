@@ -113,6 +113,7 @@ export default function timelineFactory(React, raf) {
     setPlay(playing) {
       if (!this.playing && playing) raf(this.tick);
       this.playing = playing;
+      this.tick();
     }
 
     togglePlay(playing) {
