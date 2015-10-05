@@ -18,7 +18,7 @@ html, body {
 
 body {
   width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 a, a:visited, a:active {
