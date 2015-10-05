@@ -58,7 +58,7 @@ export default function timelineFactory(React, raf) {
       this.listeners = {};
       this.lastListenerId = 0;
 
-      this.tick = ::this.tick;
+      this._tick = ::this._tick;
       this.play = ::this.play;
       this.pause = ::this.pause;
       this.setPlay = ::this.setPlay;
@@ -73,10 +73,16 @@ export default function timelineFactory(React, raf) {
       this.setTime(options.initialTime || this.time || 0);
       this.increment = this.increment || 1;
 
-      if (this.playing) raf(this.tick);
+      if (this.playing) raf(this._tick);
     }
 
-    tick() {
+    _emitChange() {
+      Object.keys(this.listeners).forEach(id =>
+        this.listeners[id](this.time)
+      );
+    }
+
+    _tick() {
       const {playing, time} = this;
 
       if (time >= this.max) {
@@ -88,18 +94,16 @@ export default function timelineFactory(React, raf) {
         }
       } else {
         this.setTime(time + this.increment);
-
-        Object.keys(this.listeners).forEach(id =>
-          this.listeners[id](this.time)
-        );
+        this._emitChange();
       }
 
-      if (playing) raf(this.tick);
+      if (playing) raf(this._tick);
     }
 
     setTime(time) {
       this.time = (typeof time === 'function') ? time(this.time) : time;
       this.tween = (keyframes, easer) => tween(time, keyframes, easer);
+      if (!this.playing) this._emitChange();
     }
 
     play() { this.setPlay(true) }
@@ -111,12 +115,12 @@ export default function timelineFactory(React, raf) {
       }
 
     setPlay(playing) {
-      if (!this.playing && playing) raf(this.tick);
+      if (!this.playing && playing) raf(this._tick);
       this.playing = playing;
     }
 
     togglePlay(playing) {
-      if (!this.playing) raf(this.tick);
+      if (!this.playing) raf(this._tick);
       this.playing = !this.playing;
     }
 
