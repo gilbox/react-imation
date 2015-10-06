@@ -130,17 +130,25 @@ export function createTweenValueFactory(formatter, defaultWrapper) {
   const tween = (progress, a, b, easer) =>
     formatter(tweenValues(progress, a.value, b.value, easer));
 
-  return (...value) => {
-    if (defaultWrapper)
-      value = value.map(v => isWrapped(v) ? v : defaultWrapper(v));
+  const wrap = v => isWrapped(v) ? v : defaultWrapper(v);
 
-    return {
-      value,
-      tween,
-      resolveValue() {
-        return formatter(value.map(resolveValue))
-      }
-    }
+  return defaultWrapper ?
+    (...value) =>
+      new TweenValue(value.map(wrap), formatter, tween)
+    :
+    (...value) =>
+      new TweenValue(value, formatter, tween);
+}
+
+class TweenValue {
+  constructor(value, formatter, tween) {
+    this.value = value;
+    this.formatter = formatter;
+    this.tween = tween;
+  }
+
+  resolveValue() {
+    return this.formatter(this.value.map(resolveValue))
   }
 }
 
@@ -159,26 +167,28 @@ export function createTweenValueFactory(formatter, defaultWrapper) {
  *        "scale(0.9) translate3d(0,-160,0)"
  */
 export function combine(...wrappedValues) {
-  return {
-    wrappedValues,
-    tween: combineTween,
-    resolveValue() {
-      return wrappedValues.map(resolveValue).join(' ');
-    }
-  }
+  return new Combine(wrappedValues);
 }
 
-// this function is only for `combine` above
-// it's placed outside of `combine` as an optimization
-function combineTween(progress,
-  {wrappedValues: wrappedValuesA},
-  {wrappedValues: wrappedValuesB},
-  easer
-) {
-  return wrappedValuesA
-    .map((wrappedValueA, index) =>
-      tweenValues(progress, wrappedValueA, wrappedValuesB[index], easer))
-    .join(' ');
+class Combine {
+  constructor(wrappedValues) {
+    this.wrappedValues = wrappedValues;
+  }
+
+  tween(progress,
+    {wrappedValues: wrappedValuesA},
+    {wrappedValues: wrappedValuesB},
+    easer
+  ) {
+    return wrappedValuesA
+      .map((wrappedValueA, index) =>
+        tweenValues(progress, wrappedValueA, wrappedValuesB[index], easer))
+      .join(' ');
+  }
+
+  resolveValue() {
+    return this.wrappedValues.map(resolveValue).join(' ');
+  }
 }
 
 /**
@@ -196,18 +206,25 @@ export function ease(easer, wrappedValue) {
     return wrappedValue => ease(easer, wrappedValue);
   }
 
-  return {
-    easedValue: wrappedValue,
-    tween(progress, wrappedValueA, wrappedValueB) {
-      return tweenValues(
-        progress,
-        wrappedValueA.easedValue,
-        // give flexibility not to wrap b value in the ease factory
-        wrappedValueB.easedValue ? wrappedValueB.easedValue : wrappedValueB,
-        easer || identity)
-    },
-    resolveValue() {
-      return resolveValue(wrappedValue);
-    }
+  return new Ease(easer, wrappedValue);
+}
+
+class Ease {
+  constructor(easer, wrappedValue) {
+    this.easer = easer;
+    this.easedValue = wrappedValue;
+  }
+
+  tween(progress, wrappedValueA, wrappedValueB) {
+    return tweenValues(
+      progress,
+      wrappedValueA.easedValue,
+      // give flexibility not to wrap b value in the ease factory
+      wrappedValueB.easedValue ? wrappedValueB.easedValue : wrappedValueB,
+      this.easer || identity)
+  }
+
+  resolveValue() {
+    return resolveValue(this.easedValue);
   }
 }
