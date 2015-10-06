@@ -31,16 +31,18 @@ argument which is an object whose entries represent
 timeline positions and their associated values.
 Note that `tween` assumes that the keyframes are sorted.
 
-    import {tween} from 'react-imation';
-    import {rotate} from 'react-imation/tween-value-factories';
+```jsx
+import {tween} from 'react-imation';
+import {rotate} from 'react-imation/tween-value-factories';
 
-    // ...render:
-      <h2
-        style={tween(time, {
-           0: { transform: rotate(0) },
-          60: { transform: rotate(360) } })}>
-        spin
-      </h2>
+// ...render:
+  <h2
+    style={tween(time, {
+       0: { transform: rotate(0) },
+      60: { transform: rotate(360) } })}>
+    spin
+  </h2>
+```
 
 Tweening values that require special formatting is
 super-easy. All you have to do is create a new
@@ -65,9 +67,11 @@ above, it also works with regular numbers. Here are some examples:
 
 You can use this approach to tween styles:
 
-    <h2 style={{ transform: `rotate(${tween(time, {0:0,60:360})}deg)` }}>
-      spin
-    </h2>
+```jsx
+<h2 style={{ transform: `rotate(${tween(time, {0:0,60:360})}deg)` }}>
+  spin
+</h2>
+```
 
 You can tween all of your styles this way and it will work fine.
 However, when you have a lot of styles this can get tedious and difficult
@@ -149,13 +153,14 @@ readable and intuitive API for animation.
 
 In react we can use this in a style tag:
 
-    <div
-      style={{
-        backgroundColor: 'red'
-        transform: tween(time, {  0: rotate(0)   },
-                                 60: rotate(360) })
-      }}>
-
+```jsx
+<div
+  style={{
+    backgroundColor: 'red'
+    transform: tween(time, {  0: rotate(0)   },
+                             60: rotate(360) })
+  }}>
+```
 
 #### `tween`: tweening object literals
 
@@ -164,36 +169,44 @@ actually tweening the values within those objects and returning
 a new object with a similar shape. This works
 with both numbers and wrapped values.
 
-    <h2
-      style={tween(time, {
-         0: { transform: rotate(0) },
-        60: { transform: rotate(360) } })}>
-      spin
-    </h2>
+```jsx
+<h2
+  style={tween(time, {
+     0: { transform: rotate(0) },
+    60: { transform: rotate(360) } })}>
+  spin
+</h2>
+```jsx
 
 The result is something like this:
 
-    <h2 style={{ transform: 'rotate(180deg)' }}>
-      spin
-    </h2>
+```jsx
+<h2 style={{ transform: 'rotate(180deg)' }}>
+  spin
+</h2>
+```
 
 The real advantage of using object literals is
 that it allows you to tween multiple style properties
 in one `tween()`:
 
-    <h2
-      style={tween(time, {
-         0: { backgroundColor: rgba(0,200,0,.5), transform: rotate(0) },
-        60: { backgroundColor: rgba(200,0,0,1), transform: rotate(360) } })}>
-      spin
-    </h2>
+```jsx
+<h2
+  style={tween(time, {
+     0: { backgroundColor: rgba(0,200,0,.5), transform: rotate(0) },
+    60: { backgroundColor: rgba(200,0,0,1), transform: rotate(360) } })}>
+  spin
+</h2>
+```jsx
 
 the result is something like:
 
-    <h2 style={{ backgroundColor: 'rgba(100,100,0,.75)',
-                 transform: 'rotate(180deg)' }}>
-      spin
-    </h2>
+```jsx
+<h2 style={{ backgroundColor: 'rgba(100,100,0,.75)',
+             transform: 'rotate(180deg)' }}>
+  spin
+</h2>
+```
 
 **warning**: All keyframes in a single tween must have exactly the same
 properties. The only exception to this is when using easing.
@@ -267,39 +280,41 @@ There are three ways to ease with `tween`:
 
 Timeline as a component is super-handy. It manages the state of `time`.
 
-    <Timeline
-      playOnMount={true}
-      min={0}
-      max={100}
-      loop={true}>
-    {({time, playing, togglePlay, setTime}) =>
-      <div>
+```jsx
+<Timeline
+  playOnMount={true}
+  min={0}
+  max={100}
+  loop={true}>
+{({time, playing, togglePlay, setTime}) =>
+  <div>
 
-        The timeline is {playing ? '' : 'not '}playing! <br />
-        Current time is {time}. <br />
+    The timeline is {playing ? '' : 'not '}playing! <br />
+    Current time is {time}. <br />
 
-        We can easily create a pause button like this:<br />
-        <button onClick={togglePlay}>
-          {playing ? 'pause' : 'play'}
-        </button>
+    We can easily create a pause button like this:<br />
+    <button onClick={togglePlay}>
+      {playing ? 'pause' : 'play'}
+    </button>
 
-        <br />
+    <br />
 
-        ... or jump around the timeline: <br />
-        <button onClick={event => setTime(50)}>
-          Jump to 50
-        </button>
+    ... or jump around the timeline: <br />
+    <button onClick={event => setTime(50)}>
+      Jump to 50
+    </button>
 
-        ... and tween to spin some text:
-        <h2
-          style={tween(time, {
-              0: { transform: rotate(0) },
-            100: { transform: rotate(360) } })}>
-          spin
-        </h2>
+    ... and tween to spin some text:
+    <h2
+      style={tween(time, {
+          0: { transform: rotate(0) },
+        100: { transform: rotate(360) } })}>
+      spin
+    </h2>
 
-      </div>
-    }</Timeline>
+  </div>
+}</Timeline>
+```
 
 #### `<Timeline />`: overview
 
@@ -322,23 +337,25 @@ need the added flexibility of *lifting* the state management functionality
 outside of the `<Timeline />` component. Here's what it looks like when
 we provide a `timeliner` prop:
 
-    const timeliner = new Timeliner();
-    timeliner.play();
+```jsx
+const timeliner = new Timeliner();
+timeliner.play();
 
-    <div>
-      <button
-        onClick={() =>
-          this.setState({showTimeline: !this.state.showTimeline})
-        }>
-          Toggle
-      </button>
+<div>
+  <button
+    onClick={() =>
+      this.setState({showTimeline: !this.state.showTimeline})
+    }>
+      Toggle
+  </button>
 
-      {this.state.showTimeline &&
-        <Timeline timeliner={timeliner}>
-        {({time}) =>
-          `The current time is {time}`
-        }</Timeline>
-    </div>
+  {this.state.showTimeline &&
+    <Timeline timeliner={timeliner}>
+    {({time}) =>
+      `The current time is {time}`
+    }</Timeline>
+</div>
+```
 
 Notice how we can mount/unmount the `<Timeline />` component
 without losing it's state, and since the `timeliner` instance has
@@ -372,17 +389,19 @@ are equivalent:
 The happy consequence is that with `<Timeline />` you can use destructuring
 to easily access `Timeliner#tween`:
 
-    <Timeline>
-    {({tween}) =>
-      <h1 style={tween({
-        0:  { color: rgb(0,0,255) },
-        60: { color: rgb(255,0,0) }
-      })}>
-        I change color!
-      </h1>
-    }</Timeline>
+```jsx
+<Timeline>
+{({tween}) =>
+  <h1 style={tween({
+    0:  { color: rgb(0,0,255) },
+    60: { color: rgb(255,0,0) }
+  })}>
+    I change color!
+  </h1>
+}</Timeline>
+```
 
 ## react-native support
 
 Supports react-native as of `v0.2.6`, however performance is not so good
-because react-native works best when native props are manipulated directly. 
+because react-native works best when native props are manipulated directly.
