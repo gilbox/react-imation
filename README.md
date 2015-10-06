@@ -176,7 +176,7 @@ with both numbers and wrapped values.
     60: { transform: rotate(360) } })}>
   spin
 </h2>
-```jsx
+```
 
 The result is something like this:
 
@@ -197,7 +197,7 @@ in one `tween()`:
     60: { backgroundColor: rgba(200,0,0,1), transform: rotate(360) } })}>
   spin
 </h2>
-```jsx
+```
 
 the result is something like:
 
