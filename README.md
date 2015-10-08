@@ -20,6 +20,11 @@ If you clone this repo you can run the examples locally via:
         npm install
         npm run examples
 
+#### In the Wild
+
+- [airbnb javascript](http://airbnb.io/projects/javascript/)
+- Your demo? ([edit this file](https://github.com/gilbox/react-imation/edit/master/README.md))
+
 ## [`tween(currentFrame, keyframes, [ease])`](https://github.com/gilbox/react-imation/blob/master/src/tween.js)
 
 The first argument, `currentFrame` is a number representing the current
