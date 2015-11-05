@@ -6,6 +6,9 @@ function isDirectory(dir) {
   return fs.lstatSync(dir).isDirectory();
 }
 
+console.log('process.env.NODE_ENV:', process.env.NODE_ENV);
+console.log('here:',path.resolve('.'));
+
 module.exports = {
 
   devtool: 'inline-source-map',
