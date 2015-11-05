@@ -406,6 +406,26 @@ to easily access `Timeliner#tween`:
 }</Timeline>
 ```
 
+#### `Interval`
+
+An easy way to repeatedly set an interval with a
+component.
+It extracts away the react lifecycle challenges
+so that all you have to think about is what to do
+every tick and how to schedule the next interval.
+
+#### `animationFrame`
+
+Simple ticking decorator that manages destroying
+requestAnimationFrame when component unmounts.
+All you have to supply is the `callback` function
+which gets called every tick.
+
+#### `<Animation Frame />`
+
+Simple ticking component, just supply `onTick` prop
+
+
 ## react-native support
 
 Supports react-native as of `v0.2.6`, however performance is not so good

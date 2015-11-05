@@ -1,6 +1,6 @@
 {
   "name": "react-imation",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "functional tweening and animation for react",
   "main": "./src/index",
   "repository": {
