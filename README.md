@@ -235,12 +235,12 @@ There are three ways to ease with `tween`:
 
         <h2
           style={tween(time, {
-             0: { transform: rotate(0), tween: easeOutSine },
+             0: { transform: rotate(0), ease: easeOutSine },
             60: { transform: rotate(360) } })}>
           spin
         </h2>
 
-3. Wrap a number in the `ease` TvF. The `ease` TvF will override
+3. Wrap a TvF in the `ease` TvF. The `ease` TvF will override
     any other type of easing.
 
         <h2
