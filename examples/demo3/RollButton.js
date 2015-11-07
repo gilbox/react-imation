@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Easer} from 'functional-easing';
-import {ease, Timeline, Timeliner} from 'react-imation';
+import {ease} from 'react-imation';
+import {Timeline, Timeliner} from 'react-imation/timeline';
 import {translateY} from 'react-imation/tween-value-factories';
 import stateful from 'react-stateful-stream';
 import {track, derive} from 'react-derive';

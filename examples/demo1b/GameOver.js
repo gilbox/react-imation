@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Timeline, Timeliner, combine} from 'react-imation';
+import {combine} from 'react-imation';
+import {Timeline, Timeliner} from 'react-imation/timeline';
 import {scale, rotateY} from 'react-imation/tween-value-factories';
 import {Easer} from 'functional-easing';
 import RollButton from '../demo3/RollButton';

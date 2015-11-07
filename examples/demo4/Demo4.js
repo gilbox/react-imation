@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Timeline} from 'react-imation';
+import {Timeline} from 'react-imation/timeline';
 import stateful from 'react-stateful-stream';
 import {rotateX, rotateY, rotateZ,
         translateY, turn, vh, rgba} from 'react-imation/tween-value-factories';

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Timeline, tween, ease} from 'react-imation';
+import {tween, ease} from 'react-imation';
+import {Timeline} from 'react-imation/timeline';
 import {Easer} from 'functional-easing';
 
 const easeIn = ease(new Easer().using('in-cubic'));

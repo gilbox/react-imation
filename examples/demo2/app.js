@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Easer} from 'functional-easing';
-import {Timeline} from 'react-imation';
+import {Timeline} from 'react-imation/timeline';
 import {rotate, percent} from 'react-imation/tween-value-factories';
 import Scrubber from './Scrubber';
 import {Spring} from 'react-motion';

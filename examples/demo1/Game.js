@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Timeline, Timeliner, tween, combine} from 'react-imation';
+import {tween, combine} from 'react-imation';
+import {Timeline, Timeliner} from 'react-imation/timeline';
 import {percent, translate3d, scale, translateX, rotateY} from 'react-imation/tween-value-factories';
 import stateful from 'react-stateful-stream';
 import {derive, track} from 'react-derive';
