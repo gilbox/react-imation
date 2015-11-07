@@ -5,6 +5,25 @@ various composable utilities for creating complex timeline-based animation in a 
 
     npm install react-imation --save
 
+Since this is a library of composable utility functions and components that mostly
+don't rely on each other, there is no fully bundled import. This keeps `react-imation`
+light-weight. The following imports are available:
+
+  - `react-imation`
+  - `react-imation/animationFrame`
+  - `react-imation/Interval`
+  - `react-imation/timeline`
+  - `react-imation/tween-value-factories`
+
+For react-native the following imports are available
+(support is limited to a subset of the above, atm):
+
+  - `react-imation/native`
+  - `react-imation/timeline/native`
+  - `react-imation/tween-value-factories`
+
+## Demos
+
 -  [Demo1](http://gilbox.github.io/react-imation/examples/demo1/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo1/Game.js)] `tween`, `<Timeline />`  ***Exploding Snowflakes***
 -  [Demo2](http://gilbox.github.io/react-imation/examples/demo2/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo2/app.js)] `tween`, `<Timeline />`, `react-motion`
 - [Demo3](http://gilbox.github.io/react-imation/examples/demo3/demo.html): [[source](https://github.com/gilbox/react-imation/blob/master/examples/demo3/RollButton.js)] `tween`, `<Timeline />`, `Timeliner`
@@ -15,7 +34,7 @@ Also check out [`react-track`](https://github.com/gilbox/react-track)'s'
 demo which combines `react-imation` tweening with
 DOM tracking.
 
-If you clone this repo you can run the examples locally via:
+If you clone this repo you can run the demos locally via:
 
         npm install
         npm run examples
@@ -281,7 +300,66 @@ There are three ways to ease with `tween`:
     combine(rotate(90), translateX(100))
       .resolveValue();    //=> "rotate(90deg) translateX(100px)"
 
-## [`<Timeline />`](https://github.com/gilbox/react-imation/blob/master/src/timeline.js)
+
+## `<Interval />`
+
+    import Interval from 'react-imation/Interval';
+
+Stateless component providing an
+easy way to repeatedly set an interval.
+It extracts away the react lifecycle challenges
+so that all you have to think about is what to do
+every tick and how to schedule the next interval.
+
+    <Interval onTick={scheduleTick => {
+      console.log('tick!');
+      scheduleTick(1000); // schedule next tick for 1 second from now
+    }} />;
+
+## `animationFrame`
+
+    import { animationFrame } from 'react-imation/animationFrame';
+
+Stateless ticking decorator that manages destroying
+requestAnimationFrame when component unmounts.
+All you have to supply is the only argument,
+a `callback` function
+which gets called every tick.
+
+**ES7 Decorator:** (with class-based component)
+
+    @animationFrame(({onTick}) => onTick())
+    class Foo extends Component {
+      render() {
+        return <div>{this.props.foo}</div>
+      }
+    }
+
+**Functionally:** (with stateless component)
+
+    animationFrame(
+      ({onTick}) => onTick()
+    )(
+      props => <div>{props.foo}</div>
+    )
+
+In both examples above we assume an `onTick` prop
+is being passed down and it will handle each
+tick event.
+
+## `<AnimationFrame />`
+
+    import { AnimationFrame } from 'react-imation/animationFrame';
+
+Stateless ticking component. Just supply a callback
+function to `onTick` prop.
+
+    <AnimationFrame onTick={() => console.log('tick'))}>
+
+
+## [`<Timeline />`](https://github.com/gilbox/react-imation/blob/master/src/timeline/timeline.js)
+
+    import { Timeline, Timeliner } from 'react-imation/timeline'
 
 Timeline as a component is super-handy. It manages the state of `time`.
 
@@ -327,9 +405,26 @@ It accepts a single child which should be a function.
 When rendered, Timeline calls the function by passing in as the first
 argument an instance of the `Timeliner` class.
 
-#### `<Timeline />`: the [**`Timeliner`**](https://github.com/gilbox/react-imation/blob/master/src/timeline.js) class and `timeliner` prop
+**Note:** Because this is a stateful component, it will work well for simple
+use-cases. If you have more complex needs, using the `timeliner` prop
+(described below) might get you a *bit* further, but consider using
+the following lighter-weight stateless abstractions instead:
 
-The [`Timeliner`](https://github.com/gilbox/react-imation/blob/master/src/timeline.js)
+  - [`<Interval />`](#interval-)
+  - [`animationFrame`](#animationframe)
+  - [`<AnimationFrame />`](#animationframe-)
+
+they compose well in a system
+with reactive state management. Check out
+[react-three-ejecta-boilerplate](https://github.com/gilbox/react-three-ejecta-boilerplate)
+which is an example that utilizes
+[react-stateful-stream](https://github.com/gilbox/react-stateful-stream)
+for state management.
+
+
+#### `<Timeline />`: the [**`Timeliner`**](https://github.com/gilbox/react-imation/blob/master/src/timeline/timeline.js) class and `timeliner` prop
+
+The [`Timeliner`](https://github.com/gilbox/react-imation/blob/master/src/timeline/timeline.js)
 class does the heavy lifting of scheduling animation
 frames and storing the value of `time`. When using the `<Timeline />`
 component you can provide or omit a `timeliner` prop. By omitting the
@@ -405,25 +500,6 @@ to easily access `Timeliner#tween`:
   </h1>
 }</Timeline>
 ```
-
-## `<Interval />`
-
-An easy way to repeatedly set an interval with a
-component.
-It extracts away the react lifecycle challenges
-so that all you have to think about is what to do
-every tick and how to schedule the next interval.
-
-## `animationFrame`
-
-Simple ticking decorator that manages destroying
-requestAnimationFrame when component unmounts.
-All you have to supply is the `callback` function
-which gets called every tick.
-
-## `<Animation Frame />`
-
-Simple ticking component, just supply `onTick` prop
 
 
 ## react-native support
