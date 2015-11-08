@@ -244,7 +244,7 @@ I've been using is `functional-easing`.
 
 There are three ways to ease with `tween`:
 
-1. Pass the easing function as the third argument to `ease`.
+1. Pass the easing function as the third argument to `tween`.
 2. When tweening a plain object, add an `ease` property.
    The easing will apply to all properties in the keyframe.
     For example:
