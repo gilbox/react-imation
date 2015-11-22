@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {Easer} from 'functional-easing';
 import {Timeline} from 'react-imation/timeline';
 import {rotate, percent} from 'react-imation/tween-value-factories';
 import Scrubber from './Scrubber';
-import {Spring} from 'react-motion';
+import {Motion} from 'react-motion';
 
 const easeOutBounce = new Easer().using('out-bounce');
 const easeOutSine = new Easer().using('out-sine');
@@ -38,22 +39,22 @@ class App extends Component {
       {({tween,time, playing, togglePlay, setTime}) => {
 
         const top = (100 + 40 * Math.sin(time/5));
-        const left = tween({
-          [MIN_TIME]: 0,
-          [MAX_TIME]: 100
-        }, easeOutSine);
+        const left = tween([
+          [MIN_TIME, 0],
+          [MAX_TIME, 100]
+        ], easeOutSine);
 
         return <div style={{padding: 30}}>
 
-          <Spring endValue={{val: {top,left}}}>
+          <Motion style={{top,left}}>
           {interpolated =>
             <div
               style={{
                 ...styles.ball,
-                top: interpolated.val.top,
-                left: interpolated.val.left + '%',
+                top: interpolated.top,
+                left: interpolated.left + '%',
               }} />
-          }</Spring>
+          }</Motion>
 
           <div
             style={{
@@ -63,10 +64,10 @@ class App extends Component {
             }}/>
 
           <h2
-            style={tween({
-              [MIN_TIME]: { transform: rotate(0) },
-              [MAX_TIME]: { transform: rotate(360) } },
-              easeOutBounce)}>
+            style={tween([
+              [MIN_TIME, { transform: rotate(0) }],
+              [MAX_TIME, { transform: rotate(360) }]
+            ], easeOutBounce)}>
             spin
           </h2>
 
@@ -88,4 +89,4 @@ class App extends Component {
   }
 }
 
-React.render(<App/>, document.getElementById('example'));
+ReactDOM.render(<App/>, document.getElementById('example'));

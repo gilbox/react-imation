@@ -61,20 +61,23 @@ export default class Demo4 extends Component {
     const charCount = chars.length;
 
     const wiggleTransform = wiggleTypes[wiggleType];
-    const wiggleKeyframes = {
-      0:   {transform: wiggleTransform(0)},
-      10:  {transform: wiggleTransform(25)},
-      40:  {transform: wiggleTransform(-30)},
-      60:  {transform: wiggleTransform(30)},
-      100: {transform: wiggleTransform(0)} };
+    const wiggleKeyframes = [
+      [0,   {transform: wiggleTransform(0)}],
+      [10,  {transform: wiggleTransform(25)}],
+      [40,  {transform: wiggleTransform(-30)}],
+      [60,  {transform: wiggleTransform(30)}],
+      [100, {transform: wiggleTransform(0)}],
+    ];
 
-    const dropKeyframesRotate = {
-      0:   {color: rgba(255,255,255,1), transform: rotateX(turn(0)) },
-      100: {color: rgba(255,255,255,0), transform: rotateX(turn(5)) } };
+    const dropKeyframesRotate = [
+      [0,   {color: rgba(255,255,255,1), transform: rotateX(turn(0)) }],
+      [100, {color: rgba(255,255,255,0), transform: rotateX(turn(5)) }],
+    ];
 
-    const dropKeyframesMove = {
-      0:   { transform: translateY(vh(0)) },
-      100: { transform: translateY(vh(50)) } };
+    const dropKeyframesMove = [
+      [0,   { transform: translateY(vh(0)) }],
+      [100, { transform: translateY(vh(50)) }],
+    ];
 
     return <div style={{position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden'}}>
       <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%)'}}>

@@ -68,6 +68,24 @@ import {rotate} from 'react-imation/tween-value-factories';
   </h2>
 ```
 
+We can also write the previous example using an array of `[key, value]` touples instead
+of an object. **This way of using `tween` is recommended** because
+javascript objects do not sort negative keyframe values in a way
+which will work with `tween`.
+
+```jsx
+<h2
+  style={tween(time, [
+    [  0, { transform: rotate(0) }   ],
+    [ 60, { transform: rotate(360) } ] ])}>
+  spin
+</h2>
+```
+
+... most of the examples in this README use object notation,
+but it's trivial to convert them to array notation as demonstrated
+above.
+
 Tweening values that require special formatting is
 super-easy. All you have to do is create a new
 tween value factory. Check out
@@ -79,20 +97,20 @@ and you'll see what I mean.
 While `tween` works with more sophisticated *wrapped* values as demonstrated
 above, it also works with regular numbers. Here are some examples:
 
-    tween(0.5, {0:10, 1:20}); //=> 15
+    tween(0.5, [[0, 10], [1, 20]]); //=> 15
 
     tween(5, {0:10, 10:20});  //=> 15
 
-    tween(10, {0:0,
-               20:10,
-               30:20});       //=> 5
+    tween(10, [[0,  0 ],
+               [20, 10],
+               [30, 20]]);       //=> 5
 
     tween(5, {0:10, 5:0});    //=> 5
 
 You can use this approach to tween styles:
 
 ```jsx
-<h2 style={{ transform: `rotate(${tween(time, {0:0,60:360})}deg)` }}>
+<h2 style={{ transform: `rotate(${tween(time, [[0:0],[60:360]])}deg)` }}>
   spin
 </h2>
 ```
