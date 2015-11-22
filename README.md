@@ -69,8 +69,9 @@ import {rotate} from 'react-imation/tween-value-factories';
 ```
 
 We can also write the previous example using an array of `[key, value]` touples instead
-of an object. **This way of using `tween` is recommended** because
-javascript objects do not sort negative keyframe values in a way
+of an object. **This way of using `tween` is recommended**
+(object notation may soon be deprecated) because
+javascript objects do not sort floating point nor negative keyframe values in a way
 which will work with `tween`.
 
 ```jsx

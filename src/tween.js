@@ -121,7 +121,8 @@ export function tweenObject(position, keyframes, easer=identity) {
   const positionB = positions[index];
 
   if (process.env.NODE_ENV !== 'production') {
-    if (positionA instanceof Function || positionB instanceof Function) {
+    console.warn('react-imation tween(): You\'re tweening with object notation, which may be deprecated. Use at your own peril. Array notation is recommended instead.');
+    if (typeof positionA === 'function' || typeof positionB === 'function') {
       throw Error('Keyframes are not allowed to contain function as properties', keyframes);
     }
   }
@@ -138,8 +139,6 @@ export function tweenObject(position, keyframes, easer=identity) {
 }
 
 export function tweenArray(position, keyframes, easer=identity) {
-  // mapping to number because Object.keys coerces to strings
-  // todo: is there a better way to handle this?
   const positions = keyframes.map(k => k[0]);
 
   const n = positions.length-1;
@@ -157,8 +156,8 @@ export function tweenArray(position, keyframes, easer=identity) {
   const positionB = positions[indexB];
 
   if (process.env.NODE_ENV !== 'production') {
-    if (positionA instanceof Function || positionB instanceof Function) {
-      throw Error('Keyframes are not allowed to contain function as properties', keyframes);
+    if (typeof positionA === 'function' || typeof positionB === 'function') {
+      throw Error('Keyframes are not allowed to contain functions as keys', keyframes);
     }
   }
 
