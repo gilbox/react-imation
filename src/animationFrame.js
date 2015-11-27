@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
-const raf = requestAnimationFrame;
-const cancelRaf = cancelAnimationFrame;
+import raf, { cancel as cancelRaf } from 'raf';
 
 // Simple ticking decorator that manages destroying
 // requestAnimationFrame when component unmounts.
