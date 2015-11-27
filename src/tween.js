@@ -26,7 +26,7 @@ function mapObject(fn) {
 export function tweenValues(progress, a, b, easer) {
   // for added flexibility with easing, we don't enforce
   // that b is wrapped
-  if (isWrapped(a))
+  if (a.tween)
     return a.tween(progress, a, b, easer);
 
   // now we enforce that a and b are the same type
@@ -35,10 +35,10 @@ export function tweenValues(progress, a, b, easer) {
       throw(Error(`Tried to tween mismatched types ${typeof(a)} !== ${typeof(b)}`));
   }
 
-  if (a instanceof Array)
+  if (Array.isArray(a))
     return a.map((value,index) => tweenValues(progress, value, b[index], easer));
 
-  if (isNumber(a))
+  if (typeof a === 'number')
     return a + easer(progress) * (b-a);
 
   // object
@@ -46,9 +46,9 @@ export function tweenValues(progress, a, b, easer) {
 }
 
 export const resolveValue = x =>
-  isWrapped(x) ? x.resolveValue() :
-  isNumber(x) ? x :
-    x::mapObject(resolveValue); // is object
+  x.resolveValue ? x.resolveValue() : // is wrapped value
+    typeof x === 'number' ? x :       // is number
+    x::mapObject(resolveValue);       // is object
 
 /**
  * ## tween
