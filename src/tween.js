@@ -55,22 +55,7 @@ export const resolveValue = x =>
  *
  * `position` is a number representing the current timeline position
  *
- * `keyframes` is an object or an Array
- *  When `keyframes` is an object:
- *   - the properties are numbers
- *     representing keyframe positions on the timeline. Note that your
- *     keyframes must *already* be sorted, `tween` will **not** sort them for you.
- *   - the values are either numbers, objects, or wrapped values (wrapped values may also be nested)
- *       * when the values are numbers `tween` returns a (tweened) Number
- *       * when the values are objects `tween` returns an object.
- *       * when the values are wrapped values `tween` returns the resolved result of the wrapped
- *         value (usually a string)
- *   - may optionally provide an `ease` property specifying an easing function
- *  Note that all Keyframe values should be exactly the same type or shape.
- *   (a value factory may make exceptions to this rule.
- *    when doing `ease(easer, a)`, `b` does not have to be wrapped in `ease()`)
- *
- * When `keyframes` is an array
+ * `keyframes` is an array
  *   - Each item in the array should be a touple (a 2-item array) where the first
  *     value of the touples represent positions on the timeline. Note that your
  *     keyframes must *already* be sorted, `tween` will **not** sort them for you.
@@ -96,49 +81,14 @@ export const resolveValue = x =>
  *   any keyframe or `tween()`-level easing.
  */
 export function tween(position, keyframes, easer=identity) {
-  if (Array.isArray(keyframes)) {
-    return tweenArray(position, keyframes, easer);
-  }
 
-  return tweenObject(position, keyframes, easer);
-}
-
-export function tweenObject(position, keyframes, easer=identity) {
-  // mapping to number because Object.keys coerces to strings
-  // todo: is there a better way to handle this?
-  const positions = Object.keys(keyframes).map(Number);
-
-  const position0 = positions[0];
-  const positionN = positions[positions.length-1];
-
-  if (position <= position0) return resolveValue(keyframes[position0]);
-  if (position >= positionN) return resolveValue(keyframes[positionN]);
-
-  let index = 0;
-  while (position > positions[++index]);
-
-  const positionA = positions[index-1];
-  const positionB = positions[index];
-
+  // TODO: remove for v1.0
   if (process.env.NODE_ENV !== 'production') {
-    console.warn('react-imation tween(): You\'re tweening with object notation, which may be deprecated. Use at your own peril. Array notation is recommended instead.');
-    if (typeof positionA === 'function' || typeof positionB === 'function') {
-      throw Error('Keyframes are not allowed to contain function as properties', keyframes);
+    if (!Array.isArray(keyframes)) {
+      throw Error('tween: as of react-imation@0.5.0, keyframes must be an array')
     }
   }
 
-  const range = positionB - positionA;
-  const delta = position - positionA;
-  const progress = delta / range;
-
-  return tweenValues(
-    progress,
-    keyframes[positionA],
-    keyframes[positionB],
-    keyframes[positionA].ease || easer);
-}
-
-export function tweenArray(position, keyframes, easer=identity) {
   const positions = keyframes.map(k => k[0]);
 
   const n = positions.length-1;

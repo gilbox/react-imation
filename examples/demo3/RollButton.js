@@ -96,22 +96,33 @@ export default class RollButton extends Component {
             {isOver &&
               <Timeline timeliner={timeliner}>
               {({tween}) =>
-                  <div style={{
-                    position: 'absolute',
-                    ...tween({
-                        0: { transform: translateY(450), ease: easeOutSine },
-                        30: { transform: translateY(-15), ease: easeOutElastic },
-                        50: { transform: translateY(0) },
-                      })
-                    }}>
-                    <div style={{whiteSpace: 'no-wrap', opacity: tween({0: 1, 30: 1, 40: 0}), position: 'absolute', bottom: 0, textAlign: 'left'}}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      ...tween([
+                        [0,  { transform: translateY(450), ease: easeOutSine }],
+                        [30, { transform: translateY(-15), ease: easeOutElastic }],
+                        [50, { transform: translateY(0) }],
+                      ])
+                    }}
+                  >
+                    <div style={{whiteSpace: 'no-wrap', opacity: tween([[0, 1], [30, 1], [40, 0]]), position: 'absolute', bottom: 0, textAlign: 'left'}}>
                       {topList.map(item =>
                         <div style={listStyle} key={item}>{item}</div>)}
                     </div>
                     <div style={{position: 'absolute', top: '100%', width: '500px', textAlign: 'left'}}>
-                      <div style={{color: 'black', opacity: tween({0:0.4, 18:0.4, 22:1})}}>{currentText}</div>
+                      <div style={{color: 'black', opacity: tween([[0, 0.4], [18, 0.4], [22, 1]])}}>{currentText}</div>
                       {bottomList.map(item =>
-                        <div style={{opacity: tween({0: 1, 30: 1, 40: 0}), ...listStyle}} key={item}>{item}</div>)}
+                        <div
+                          style={{
+                            opacity: tween([[0, 1], [30, 1], [40, 0]]),
+                            ...listStyle
+                          }}
+                          key={item}
+                        >
+                          {item}
+                        </div>
+                      )}
                     </div>
                   </div>
               }</Timeline>}

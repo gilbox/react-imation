@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import Demo4 from './Demo4';
 
 class App extends Component {
@@ -17,4 +18,4 @@ class App extends Component {
   }
 }
 
-React.render(<App/>, document.getElementById('example'));
+ReactDOM.render(<App/>, document.getElementById('example'));

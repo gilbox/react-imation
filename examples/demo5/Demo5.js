@@ -42,7 +42,13 @@ export default class Demo5 extends Component {
                 borderRadius: '50%',
                 background: 'red',
                 width: ballDiameter,
-                height: ballDiameter + tween(y, [[0,0], [370,0], [400,-40]]),
+                height: 
+                  ballDiameter +
+                  tween(y, [
+                    [0,   0],
+                    [370, 0],
+                    [400, -40]
+                  ]),
                 transform: `translateY(${y}px)`
               }} />
           }}</Timeline>

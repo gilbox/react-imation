@@ -86,7 +86,7 @@ export default class Game extends Component {
   }
 }
 
-const shakeKeyframes = { 0: 10, 5: -8, 10: 5, 15: 0};
+const shakeKeyframes = [ [0, 10], [5, -8], [10, 5], [15, 0] ];
 
 @optimize({statics: ['score']}) // changing the 'score' prop won't cause re-render
 class Flakes extends Component {
@@ -115,8 +115,12 @@ class Flakes extends Component {
       playFrom(t => Math.max(0, t-10)); // shake
       rotationSpeed>0 ? playRandomPfSound() : crrSound.play();
       explodeFlake(index);
-      addToScore(10000 * rotationSpeed * increment / size
-                 * tween(droppedCount, {0:1, [MAX_DROPPED]:6}, easeInSine));
+      addToScore(
+        10000 * rotationSpeed * increment / size *
+        tween(droppedCount, [
+          [ 0,           1 ],
+          [ MAX_DROPPED, 6 ]
+        ], easeInSine));
     };
 
     return (
@@ -130,7 +134,7 @@ class Flakes extends Component {
 
           {flakes.map(({id, increment, size, rotateX, rotateY, rotationSpeed, left, drift, image, explode}, index) =>
             <Timeline
-              increment={tween(droppedCount, {0:increment, [MAX_DROPPED]: increment*2}, easeInSine)}
+              increment={tween(droppedCount, [[0,increment], [MAX_DROPPED, increment*2]], easeInSine)}
               key={id}
               playOnMount={true}
               max={105}
@@ -146,7 +150,7 @@ class Flakes extends Component {
                   position: 'absolute',
                   left,
                   top: -size,
-                  transform: `translateX(${tween(time, {0:0, 105:drift})}px) ` +
+                  transform: `translateX(${tween(time, [[0, 0], [105, drift]] )}px) ` +
                              `translateY(${time}vh) rotateX(${rotateX}deg) rotateY(${rotateY}deg)` }}>
 
                 <Flake
@@ -233,7 +237,11 @@ class Flake extends Component {
     return (  // exploding snowflake:
       <Timeline playOnMount={true} max={60} onComplete={onExploded}>
       {({time}) => {
-        const scaleAmount = tween(time, {0:1, 5:1.3, 60:0});
+        const scaleAmount = tween(time, [
+          [0,  1],
+          [5,  1.3],
+          [60, 0]
+        ]);
         return <div
           style={{
             position: 'absolute',
@@ -253,12 +261,15 @@ class Flake extends Component {
                     backgroundSize: `${size}px ${size}px`,
                     backgroundPosition: `${posV} ${posH}`,
                     backgroundImage: `url(${image})`,
-                    opacity: tween(time, {0: 1, 60: 0}, easeOutSine),
-                    transform: tween(time,
-                      { 0: combine(translate3d(0,0,0), scale(1,1)),
-                       60: combine(translate3d(50*h,50*v,100), scale(0,0))}, easeOutSine),
-                    borderRadius: tween(time,
-                      {0:percent(0), 60:percent(50)}, easeOutSine),
+                    opacity: tween(time, [[0, 1], [60, 0]], easeOutSine),
+                    transform: tween(time, [
+                      [  0, combine(translate3d(0,0,0),         scale(1,1)) ],
+                      [ 60, combine(translate3d(50*h,50*v,100), scale(0,0)) ]
+                    ], easeOutSine),
+                    borderRadius: tween(time, [
+                      [0,  percent(0)],
+                      [60, percent(50)]
+                    ], easeOutSine),
                   }} />)}
             </div>
         </div>}

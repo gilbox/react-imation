@@ -1,6 +1,6 @@
 {
   "name": "react-imation",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "functional tweening and animation for react",
   "main": "./src/index",
   "repository": {
@@ -43,9 +43,9 @@
     "karma-webpack": "^1.3.1",
     "lodash": "^3.10.1",
     "mocha": "^2.0.1",
-    "react": "0.14.0",
+    "react": "^0.14.0",
     "react-derive": "^0.1.1",
-    "react-dom": "0.14.0",
+    "react-dom": "^0.14.0",
     "react-motion": "^0.3.0",
     "react-stateful-stream": "^0.3.0",
     "react-three": "0.7.1",

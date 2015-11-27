@@ -47,12 +47,12 @@ If you clone this repo you can run the demos locally via:
 ## [`tween(currentFrame, keyframes, [ease])`](https://github.com/gilbox/react-imation/blob/master/src/tween.js)
 
 The first argument, `currentFrame` is a number representing the current
-position in the animation **timeline**. It can represent actual time, or as in the
-example below, it can represent the current scroll position.
+position in the animation **timeline**.
 
 The aforementioned **timeline** is represented by the `keyframes`
-argument which is an object whose entries represent
-timeline positions and their associated values.
+argument which is an an array of `[key, value]` touples.
+The 2 components of each touple represents a timeline
+position and it's state, respectively.
 Note that `tween` assumes that the keyframes are sorted.
 
 ```jsx
@@ -61,31 +61,17 @@ import {rotate} from 'react-imation/tween-value-factories';
 
 // ...render:
   <h2
-    style={tween(time, {
-       0: { transform: rotate(0) },
-      60: { transform: rotate(360) } })}>
+    style=tween(time, [
+      [  0, { transform: rotate(0) } ],
+      [ 60, { transform: rotate(360) } ]
+    ])
+  >
     spin
   </h2>
 ```
 
-We can also write the previous example using an array of `[key, value]` touples instead
-of an object. **This way of using `tween` is recommended**
-(object notation may soon be deprecated) because
-javascript objects do not sort floating point nor negative keyframe values in a way
-which will work with `tween`.
-
-```jsx
-<h2
-  style={tween(time, [
-    [  0, { transform: rotate(0) }   ],
-    [ 60, { transform: rotate(360) } ] ])}>
-  spin
-</h2>
-```
-
-... most of the examples in this README use object notation,
-but it's trivial to convert them to array notation as demonstrated
-above.
+*Note: Support for object typed `keyframes` param
+has been removed as of `react-imation@0.5.0`*
 
 Tweening values that require special formatting is
 super-easy. All you have to do is create a new
@@ -100,18 +86,18 @@ above, it also works with regular numbers. Here are some examples:
 
     tween(0.5, [[0, 10], [1, 20]]); //=> 15
 
-    tween(5, {0:10, 10:20});  //=> 15
+    tween(5, [[0, 10], [10, 20]]);  //=> 15
 
     tween(10, [[0,  0 ],
                [20, 10],
                [30, 20]]);       //=> 5
 
-    tween(5, {0:10, 5:0});    //=> 5
+    tween(5, [[0,10], [5,0]]);    //=> 5
 
 You can use this approach to tween styles:
 
 ```jsx
-<h2 style={{ transform: `rotate(${tween(time, [[0:0],[60:360]])}deg)` }}>
+<h2 style={{ transform: `rotate(${tween(time, [[0, 0],[60, 360]])}deg)` }}>
   spin
 </h2>
 ```
@@ -189,8 +175,8 @@ One of the primary goals of react-imation is to create a highly
 readable and intuitive API for animation.
 
 
-    const t = tween(30, {  0: rotate(0)   },
-                          60: rotate(360) })
+    const t = tween(30, [ [ 0, rotate(0)  ],
+                          [60, rotate(360)] ])
 
     t.resolveValue();   //=> "rotate(180deg)"
 
@@ -200,8 +186,8 @@ In react we can use this in a style tag:
 <div
   style={{
     backgroundColor: 'red'
-    transform: tween(time, {  0: rotate(0)   },
-                             60: rotate(360) })
+    transform: tween(time, [ [ 0, rotate(0)  ],
+                             [60, rotate(360)] ])
   }}>
 ```
 
@@ -214,9 +200,11 @@ with both numbers and wrapped values.
 
 ```jsx
 <h2
-  style={tween(time, {
-     0: { transform: rotate(0) },
-    60: { transform: rotate(360) } })}>
+  style={tween(time, [
+    [ 0, { transform: rotate(0)   }],
+    [60, { transform: rotate(360) }]
+  ])}
+>
   spin
 </h2>
 ```
@@ -235,9 +223,11 @@ in one `tween()`:
 
 ```jsx
 <h2
-  style={tween(time, {
-     0: { backgroundColor: rgba(0,200,0,.5), transform: rotate(0) },
-    60: { backgroundColor: rgba(200,0,0,1), transform: rotate(360) } })}>
+  style={tween(time, [
+    [  0, { backgroundColor: rgba(0,200,0,.5), transform: rotate(0)  } ],
+    [ 60, { backgroundColor: rgba(200,0,0,1), transform: rotate(360) } ]
+  ])}
+>
   spin
 </h2>
 ```
@@ -272,9 +262,11 @@ There are three ways to ease with `tween`:
         const easeOutSine = new Easer().using('out-sine');
 
         <h2
-          style={tween(time, {
-             0: { transform: rotate(0), ease: easeOutSine },
-            60: { transform: rotate(360) } })}>
+          style={tween(time, [
+            [ 0, { transform: rotate(0), ease: easeOutSine }],
+            [60, { transform: rotate(360) } ]
+          ])}
+        >
           spin
         </h2>
 
@@ -282,9 +274,11 @@ There are three ways to ease with `tween`:
     any other type of easing.
 
         <h2
-          style={tween(time, {
-             0: { transform: ease(easeOutSine, rotate(0)) },
-            60: { transform: rotate(360) } })}>
+          style={tween(time, [
+            [ 0, { transform: ease(easeOutSine, rotate(0)) }],
+            [60, { transform: rotate(360) } ]
+          ])}
+        >
           spin
         </h2>
 
@@ -302,9 +296,11 @@ There are three ways to ease with `tween`:
         const easeOutSine = ease(new Easer().using('out-sine'));
 
         <h2
-          style={tween(time, {
-             0: { transform: easeOutSine(rotate(0)) },
-            60: { transform: rotate(360) } })}>
+          style={tween(time, [
+            [ 0, { transform: easeOutSine(rotate(0)) }],
+            [60, { transform: rotate(360) }]
+          ])}
+        >
           spin
         </h2>
 
@@ -408,9 +404,11 @@ Timeline as a component is super-handy. It manages the state of `time`.
 
     ... and tween to spin some text:
     <h2
-      style={tween(time, {
-          0: { transform: rotate(0) },
-        100: { transform: rotate(360) } })}>
+      style={tween(time, [
+        [   0, { transform: rotate(0)   } ],
+        [ 100, { transform: rotate(360) } ]
+      ])}
+    >
       spin
     </h2>
 
@@ -501,9 +499,9 @@ The Timeliner class exposes a `tween` method which is the same `tween` function
 we've discussed, with the first argument already applied. The following two expressions
 are equivalent:
 
-    tween(timeliner.time, {0:0, 60:100});
+    tween(timeliner.time, [[0,0], [60,100]]);
 
-    timeliner.tween({0:0, 60:100});
+    timeliner.tween([[0,0], [60,100]]);
 
 The happy consequence is that with `<Timeline />` you can use destructuring
 to easily access `Timeliner#tween`:
@@ -511,10 +509,10 @@ to easily access `Timeliner#tween`:
 ```jsx
 <Timeline>
 {({tween}) =>
-  <h1 style={tween({
-    0:  { color: rgb(0,0,255) },
-    60: { color: rgb(255,0,0) }
-  })}>
+  <h1 style={tween([
+    [  0, { color: rgb(0,0,255) } ],
+    [ 60, { color: rgb(255,0,0) } ]
+  ])}>
     I change color!
   </h1>
 }</Timeline>

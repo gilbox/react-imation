@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import RollButton from './RollButton';
 
 class App extends Component {
@@ -45,4 +46,4 @@ class App extends Component {
   }
 }
 
-React.render(<App/>, document.getElementById('example'));
+ReactDOM.render(<App/>, document.getElementById('example'));
