@@ -10,8 +10,6 @@ import GameOver from './GameOver';
 import u from 'updeep';
 const immutable = u({});
 
-React.initializeTouchEvents(true);
-
 const easeOutSine = new Easer().using('out-sine');
 const easeInSine = new Easer().using('in-sine');
 const easeInBack = new Easer().using('in-back').withParameters(2.8);
