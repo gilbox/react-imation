@@ -50,7 +50,7 @@ The first argument, `currentFrame` is a number representing the current
 position in the animation **timeline**.
 
 The aforementioned **timeline** is represented by the `keyframes`
-argument which is an an array of `[key, value]` touples.
+argument which is an array of `[key, value]` touples.
 The 2 components of each touple represents a timeline
 position and it's state, respectively.
 Note that `tween` assumes that the keyframes are sorted.
